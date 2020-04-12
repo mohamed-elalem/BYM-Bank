@@ -11,4 +11,5 @@ public class Transaction {
     @Id
     private Long id;
 
+
 }
