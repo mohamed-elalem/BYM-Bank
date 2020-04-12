@@ -19,7 +19,12 @@ public class AccountService implements IAccountService {
 
     @Override
     public Account getSingleAccount(Long id) {
-        return this.accountRepository.getOne(id);
+        return (Account) this.accountRepository.findById ( id ).get ();
+    }
+
+    @Override
+    public Account getByAccountNumber(String accountNumber) {
+        return this.accountRepository.getAccountByNumber(accountNumber);
     }
 
     @Override

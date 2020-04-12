@@ -9,10 +9,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
-
-
+    
     @NotBlank
-    @Column(name = "account_number", nullable = false)
+    @Column(name = "account_number", nullable = false,unique = true)
     private String accountNumber;
 
     private double balance;
@@ -52,5 +51,15 @@ public class Account {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", balance=" + balance +
+                ", active=" + active +
+                '}';
     }
 }
