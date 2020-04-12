@@ -2,6 +2,10 @@ package com.bym.bankingsystem.models.auth;
 
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.BuilderCreator;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
@@ -9,10 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User implements UserDetails {
 
     public static class UserBuilder implements Builder<User> {
@@ -47,7 +55,7 @@ public class User implements UserDetails {
             return this;
         }
 
-        public UserBuilder withRoles(Collection<Role> roles) {
+        public UserBuilder withRoles(List<Role> roles) {
             this.user.setRoles(roles);
             return this;
         }
@@ -66,8 +74,10 @@ public class User implements UserDetails {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
+    @JsonIgnore
     private boolean enabled;
 
     @ManyToMany
@@ -79,7 +89,7 @@ public class User implements UserDetails {
                 name = "role_id", referencedColumnName = "id"
             )
     )
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -121,7 +131,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
@@ -141,15 +151,18 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
     public void addRole(Role role) {
+        if (this.getRoles() == null) {
+            this.setRoles(new ArrayList<>());
+        }
         this.getRoles().add(role);
     }
 

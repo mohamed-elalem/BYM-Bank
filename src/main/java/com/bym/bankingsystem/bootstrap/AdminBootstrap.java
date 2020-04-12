@@ -86,7 +86,7 @@ public class AdminBootstrap implements ApplicationListener<ContextRefreshedEvent
 
     @Transactional
     public Role createRoleIfNotFound(
-            String name, Collection<Privilege> privileges) {
+            String name, List<Privilege> privileges) {
 
         Role role = roleRepository.findOneByName(name);
         if (role == null) {
