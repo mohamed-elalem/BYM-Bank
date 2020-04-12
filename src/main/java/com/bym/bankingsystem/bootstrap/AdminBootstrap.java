@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -43,30 +44,33 @@ public class AdminBootstrap implements ApplicationListener<ContextRefreshedEvent
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        final String username = "admin";
 
-//        if (alreadySetup)
-//            return;
-//        Privilege readPrivilege
-//                = createPrivilegeIfNotFound("READ_PRIVILEGE");
-//        Privilege writePrivilege
-//                = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-//
-//        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
-//        createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-//        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
-//
-//        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-//        User user = User.create()
-//                .withEmail("test@test.com")
-//                .withPassword(this.passwordEncoder.encode("test"))
-//                .withRoles(Arrays.asList(adminRole))
-//                .withUsername("admin")
-//                .withEnabled(true)
-//                .build();
-//
-//        userRepository.save(user);
-//
-//        alreadySetup = true;
+        if (alreadyCreated(username)) {
+            return;
+        }
+        Privilege readPrivilege
+                = createPrivilegeIfNotFound("READ_PRIVILEGE");
+        Privilege writePrivilege
+                = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+
+        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
+        createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
+        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
+        createRoleIfNotFound("ROLE_TELLER", adminPrivileges);
+
+        Role adminRole = roleRepository.findOneByName("ROLE_ADMIN");
+        User user = User.create()
+                .withEmail("test@test.com")
+                .withPassword(this.passwordEncoder.encode("test"))
+                .withRoles(Arrays.asList(adminRole))
+                .withUsername(username)
+                .withEnabled(true)
+                .build();
+
+        userRepository.save(user);
+
+        alreadySetup = true;
     }
 
     @Transactional
@@ -84,11 +88,15 @@ public class AdminBootstrap implements ApplicationListener<ContextRefreshedEvent
     public Role createRoleIfNotFound(
             String name, Collection<Privilege> privileges) {
 
-        Role role = roleRepository.findByName(name);
+        Role role = roleRepository.findOneByName(name);
         if (role == null) {
             role = Role.create().withName(name).withPrivileges(privileges).build();
             roleRepository.save(role);
         }
         return role;
+    }
+
+    public boolean alreadyCreated(String username) {
+        return this.userRepository.findByUsername(username) != null;
     }
 }

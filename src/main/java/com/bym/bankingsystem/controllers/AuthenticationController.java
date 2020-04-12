@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AuthenticationController {
+public class AuthenticationController extends BaseController {
     private AuthenticationManager authenticationManager;
     private JWTUtil jwtUtil;
     private UserDetailsService userDetailsService;
@@ -28,7 +28,7 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             this.authenticationManager.authenticate(
