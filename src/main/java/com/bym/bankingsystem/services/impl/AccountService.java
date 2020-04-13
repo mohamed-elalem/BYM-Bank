@@ -35,13 +35,8 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Account save(Account account,Long userId) {
-        Optional<User> user = this.userRepository.findById ( userId );
-        if(user.isPresent ()){
-            account.setUser ( user.get () );
-        }else{
-            return user.
-        }
+    public Account save(Account account,User user) {
+        account.setUser ( user );
         Account ac = this.accountRepository.save(account);
         return ac;
     }

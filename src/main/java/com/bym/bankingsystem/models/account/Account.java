@@ -20,6 +20,9 @@ public class Account {
 
     private boolean active;
 
+    @ManyToOne
+    private User user;
+
     public User getUser() {
         return user;
     }
@@ -28,8 +31,7 @@ public class Account {
         this.user = user;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User user;
+
     public Account() {
     }
 

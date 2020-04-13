@@ -1,8 +1,10 @@
 package com.bym.bankingsystem.controllers;
 
 import com.bym.bankingsystem.models.account.Account;
+import com.bym.bankingsystem.models.auth.User;
 import com.bym.bankingsystem.models.status.Response;
 import com.bym.bankingsystem.services.IAccountService;
+import com.bym.bankingsystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +19,24 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/user/accounts")
 public class AccountController {
-    @Autowired
     IAccountService iAccountService;
+    UserService userService;
 
+    public  AccountController(IAccountService iAccountService,UserService userService){
+        this.iAccountService = iAccountService;
+        this.userService = userService;
+    }
     @PostMapping(value = "")
     public ResponseEntity createAccount(@RequestBody @Valid Account account,Long userId, BindingResult bindingResult){
-        System.out.println ("posting");
+
         try {
-            Account acc = this.iAccountService.save(account,userId);
-            return  ResponseEntity.ok(acc.getId ());
+          Optional<User> user=  userService.findByIdAndRole ( userId,"ROLE_USER" );
+          if(user.isPresent ()){
+              Account acc = this.iAccountService.save(account,user.get ());
+              return  ResponseEntity.ok(acc.getId ());
+          }else{
+              throw new IllegalArgumentException ( );
+          }
         }catch (Exception ex){
             return ResponseEntity.badRequest ().body ( bindingResult.getFieldError ());
         }
