@@ -2,6 +2,7 @@ package com.bym.bankingsystem.models.auth;
 
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.BuilderCreator;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -36,6 +37,7 @@ public class Privilege {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
 

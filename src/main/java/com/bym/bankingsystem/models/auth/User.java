@@ -3,17 +3,20 @@ package com.bym.bankingsystem.models.auth;
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.BuilderCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.Transient;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User implements UserDetails {
 
     public static class UserBuilder implements Builder<User> {
@@ -70,6 +73,7 @@ public class User implements UserDetails {
     @JsonIgnoreProperties
     private String password;
 
+    @JsonIgnore
     private boolean enabled;
 
     @ManyToMany
@@ -143,7 +147,7 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
@@ -152,6 +156,9 @@ public class User implements UserDetails {
     }
 
     public void addRole(Role role) {
+        if (this.getRoles() == null) {
+            this.setRoles(new ArrayList<>());
+        }
         this.getRoles().add(role);
     }
 
