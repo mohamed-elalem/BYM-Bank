@@ -2,16 +2,16 @@ package com.bym.bankingsystem.models.account;
 
 import com.bym.bankingsystem.models.auth.User;
 import com.bym.bankingsystem.models.transaction.Transaction;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import javax.swing.table.TableRowSorter;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Account {
-
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -20,15 +20,26 @@ public class Account {
     @Column(name = "account_number", nullable = false,unique = true)
     private String accountNumber;
 
-    private double balance;
+    private Float balance;
 
+    @JsonIgnore
     private boolean active;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy="account",fetch=FetchType.LAZY)
-    private List<Transaction> transactions = new ArrayList<>();
+    @OneToMany(mappedBy = "account")
+    @JsonManagedReference
+    private List<Transaction> transactions;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 
     public Account() {
@@ -50,11 +61,11 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public double getBalance() {
+    public Float getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Float balance) {
         this.balance = balance;
     }
 
@@ -66,14 +77,6 @@ public class Account {
         this.active = active;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public List<Transaction> getTransactions() {
         return transactions;
     }
@@ -82,13 +85,11 @@ public class Account {
         this.transactions = transactions;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", balance=" + balance +
-                ", active=" + active +
-                '}';
+    public void addTransaction(Transaction transaction) {
+        if (getTransactions() == null) {
+            this.setTransactions(new ArrayList<>());
+        }
+
+        getTransactions().add(transaction);
     }
 }
