@@ -2,19 +2,15 @@ package com.bym.bankingsystem.models.auth;
 
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.BuilderCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.Transient;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -74,7 +70,7 @@ public class User implements UserDetails {
 
     private String email;
 
-    @JsonIgnore
+    @JsonIgnoreProperties
     private String password;
 
     @JsonIgnore

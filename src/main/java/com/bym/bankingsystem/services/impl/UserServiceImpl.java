@@ -5,10 +5,10 @@ import com.bym.bankingsystem.models.auth.User;
 import com.bym.bankingsystem.repositories.RoleRepository;
 import com.bym.bankingsystem.repositories.UserRepository;
 import com.bym.bankingsystem.services.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +17,14 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService {
     public User createEnabledUser(User user, String roleName) {
         user.setEnabled(true);
         user.addRole(roleRepository.findOneByName(roleName));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
     }
