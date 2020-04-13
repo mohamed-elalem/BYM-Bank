@@ -1,5 +1,7 @@
 package com.bym.bankingsystem.models.account;
 
+import com.bym.bankingsystem.models.auth.User;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -9,7 +11,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
-    
+
     @NotBlank
     @Column(name = "account_number", nullable = false,unique = true)
     private String accountNumber;
@@ -18,6 +20,16 @@ public class Account {
 
     private boolean active;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
     public Account() {
     }
 

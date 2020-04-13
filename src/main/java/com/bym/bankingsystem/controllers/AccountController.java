@@ -11,25 +11,26 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/user/accounts")
 public class AccountController {
     @Autowired
     IAccountService iAccountService;
 
-    @PostMapping(value = "creataccount")
+    @PostMapping(value = "")
     public ResponseEntity createAccount(@RequestBody @Valid Account account, BindingResult bindingResult){
         System.out.println ("posting");
         try {
             Account acc = this.iAccountService.save(account);
             return  ResponseEntity.ok(acc.getId ());
         }catch (Exception ex){
-            System.out.println ("yyyyyy " +bindingResult.getFieldError ());
             return ResponseEntity.badRequest ().body ( bindingResult.getFieldError ());
         }
     }
 
-    @GetMapping(value ="getallaccounts")
+    @GetMapping(value ="")
     public ResponseEntity<?> findAll(){
         try {
             List<Account> accounts = this.iAccountService.getAllAccounts();
@@ -40,17 +41,18 @@ public class AccountController {
 
     }
 
-    @GetMapping(value = "getaccountbyid/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity getById(@PathVariable("id")  Long id){
-        try {
-            Account acc = this.iAccountService.getSingleAccount(id);
-            return  ResponseEntity.ok(acc);
-        }catch (Exception ex){
-            return ResponseEntity.badRequest ().body ( ex.getMessage ());
-        }
+
+        Optional<Account> acc = this.iAccountService.getSingleAccount(id);
+            if(acc.isPresent ()){
+                return  ResponseEntity.ok(acc);
+            }else{
+                return ResponseEntity.notFound ().build ();
+            }
     }
 
-    @GetMapping(value = "getbyaccountnumber/{accountNumber}")
+    @GetMapping(value = "get-by-account-number/{accountNumber}")
     public ResponseEntity getById(@PathVariable("accountNumber")  String accountNumber){
         try {
             Account acc = this.iAccountService.getByAccountNumber (accountNumber);
