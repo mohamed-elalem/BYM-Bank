@@ -2,6 +2,7 @@ package com.bym.bankingsystem.models.auth;
 
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.BuilderCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.Transient;
@@ -47,7 +48,7 @@ public class User implements UserDetails {
             return this;
         }
 
-        public UserBuilder withRoles(Collection<Role> roles) {
+        public UserBuilder withRoles(List<Role> roles) {
             this.user.setRoles(roles);
             return this;
         }
@@ -66,6 +67,7 @@ public class User implements UserDetails {
 
     private String email;
 
+    @JsonIgnoreProperties
     private String password;
 
     private boolean enabled;
@@ -79,7 +81,7 @@ public class User implements UserDetails {
                 name = "role_id", referencedColumnName = "id"
             )
     )
-    private Collection<Role> roles;
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -121,7 +123,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 
@@ -145,7 +147,7 @@ public class User implements UserDetails {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
