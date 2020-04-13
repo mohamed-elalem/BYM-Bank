@@ -6,6 +6,7 @@ import com.bym.bankingsystem.services.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,10 @@ public class AccountController {
     IAccountService iAccountService;
 
     @PostMapping(value = "")
-    public ResponseEntity createAccount(@RequestBody @Valid Account account, BindingResult bindingResult){
+    public ResponseEntity createAccount(@RequestBody @Valid Account account,Long userId, BindingResult bindingResult){
         System.out.println ("posting");
         try {
-            Account acc = this.iAccountService.save(account);
+            Account acc = this.iAccountService.save(account,userId);
             return  ResponseEntity.ok(acc.getId ());
         }catch (Exception ex){
             return ResponseEntity.badRequest ().body ( bindingResult.getFieldError ());

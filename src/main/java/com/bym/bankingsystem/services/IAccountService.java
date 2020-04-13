@@ -9,6 +9,6 @@ public interface IAccountService {
     public List<Account> getAllAccounts();
     public Optional<Account> getSingleAccount(Long id);
     public Account getByAccountNumber(String accountNumber);
-    public Account save(Account account);
+    public Account save(Account account,Long userId);
     public void delete(Long id);
 }
