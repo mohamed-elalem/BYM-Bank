@@ -1,11 +1,19 @@
 package com.bym.bankingsystem.models.auth;
 
 import com.bym.bankingsystem.models.Builder;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Role {
 
     public static class RoleBuilder implements Builder<Role> {
@@ -20,7 +28,7 @@ public class Role {
             return this;
         }
 
-        public RoleBuilder withPrivileges(Collection<Privilege> privileges) {
+        public RoleBuilder withPrivileges(List<Privilege> privileges) {
             this.role.setPrivileges(privileges);
             return this;
         }
@@ -46,7 +54,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    private List<User> users;
 
     @ManyToMany
     @JoinTable(
@@ -57,7 +65,7 @@ public class Role {
                     name = "privilage_id", referencedColumnName = "id"
             )
     )
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges;
 
     public Long getId() {
         return id;
@@ -75,11 +83,11 @@ public class Role {
         this.name = name;
     }
 
-    public Collection<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Collection<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
@@ -87,7 +95,7 @@ public class Role {
         return privileges;
     }
 
-    public void setPrivileges(Collection<Privilege> privileges) {
+    public void setPrivileges(List<Privilege> privileges) {
         this.privileges = privileges;
     }
 
