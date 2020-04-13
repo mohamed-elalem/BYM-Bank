@@ -7,12 +7,14 @@ import com.bym.bankingsystem.services.IInterestRateService;
 import com.bym.bankingsystem.services.ITransactionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/interest-rate")
+@RequestMapping("api/admin/interest-rate")
 public class InterestRateController {
     @Autowired
     IInterestRateService interestRateService;
@@ -24,8 +26,13 @@ public class InterestRateController {
     }
 
     @GetMapping("/{id}")
-    public InterestRate findInterestRateById(@PathVariable("id") Long id){
-        return interestRateService.getSingleInterestRate(id);
+    public ResponseEntity<InterestRate> findInterestRateById(@PathVariable("id") Long id){
+        Optional<InterestRate> interestRate = interestRateService.getSingleInterestRate(id);
+        if(interestRate.isPresent()){
+            return ResponseEntity.ok(interestRate.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

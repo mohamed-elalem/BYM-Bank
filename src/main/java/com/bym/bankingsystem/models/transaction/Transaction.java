@@ -1,7 +1,6 @@
 package com.bym.bankingsystem.models.transaction;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.bym.bankingsystem.models.account.Account;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-//@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -28,6 +26,22 @@ public class Transaction {
     private Long fromAccountId;
     @Column(name = "to_account_id", insertable = false, updatable = false)
     private Long toAccountId;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn (name="account_id")
+    private Account account;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn (name="from_account_id")
+    private Account fromAccount;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn (name="to_account_id")
+    private Account toAccount;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn (name="transaction_type_id")
+    private TransactionType transactionType;
 
     public Long getId() {
         return id;
@@ -83,5 +97,45 @@ public class Transaction {
 
     public void setToAccountId(Long toAccountId) {
         this.toAccountId = toAccountId;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Account getFromAccount() {
+        return fromAccount;
+    }
+
+    public void setFromAccount(Account fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    public Account getToAccount() {
+        return toAccount;
+    }
+
+    public void setToAccount(Account toAccount) {
+        this.toAccount = toAccount;
+    }
+
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", amount='" + amount + '\'' +
+                '}';
     }
 }

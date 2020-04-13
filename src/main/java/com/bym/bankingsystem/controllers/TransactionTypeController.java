@@ -5,12 +5,15 @@ import com.bym.bankingsystem.models.transaction.TransactionType;
 import com.bym.bankingsystem.services.ITransactionTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.table.TableCellRenderer;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/transaction-type")
+@RequestMapping("api/admin/transaction-type")
 public class TransactionTypeController {
 
     @Autowired
@@ -23,8 +26,13 @@ public class TransactionTypeController {
     }
 
     @GetMapping("/{id}")
-    public TransactionType findTransactionTypeById(@PathVariable("id") Long id){
-        return transactionTypeService.getSingleTransactionType(id);
+    public ResponseEntity<TransactionType> findTransactionTypeById(@PathVariable("id") Long id){
+        Optional<TransactionType> transactionType =  transactionTypeService.getSingleTransactionType(id);
+        if(transactionType.isPresent()){
+            return ResponseEntity.ok(transactionType.get());
+        } else {
+            return  ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

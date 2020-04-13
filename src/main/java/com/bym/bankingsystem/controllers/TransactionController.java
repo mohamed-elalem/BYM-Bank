@@ -10,9 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("api/admin/transaction")
 public class TransactionController {
 
     @Autowired
@@ -25,8 +26,13 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public Transaction findTransactionById(@PathVariable("id") Long id){
-        return transactionService.getSingleTransaction(id);
+    public ResponseEntity<Transaction> findTransactionById(@PathVariable("id") Long id){
+        Optional<Transaction> transaction = transactionService.getSingleTransaction(id);
+        if(transaction.isPresent()){
+            return ResponseEntity.ok(transaction.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

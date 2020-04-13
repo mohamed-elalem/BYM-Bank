@@ -1,9 +1,13 @@
 package com.bym.bankingsystem.models.account;
 
 import com.bym.bankingsystem.models.auth.User;
+import com.bym.bankingsystem.models.transaction.Transaction;
 
 import javax.persistence.*;
+import javax.swing.table.TableRowSorter;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Account {
@@ -23,13 +27,8 @@ public class Account {
     @ManyToOne
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    @OneToMany(mappedBy="account",fetch=FetchType.LAZY)
+    private List<Transaction> transactions = new ArrayList<>();
 
 
     public Account() {
@@ -65,6 +64,22 @@ public class Account {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override

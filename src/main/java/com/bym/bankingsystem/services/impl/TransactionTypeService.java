@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class TransactionTypeService implements ITransactionTypeService {
 
@@ -19,8 +21,8 @@ public class TransactionTypeService implements ITransactionTypeService {
     }
 
     @Override
-    public TransactionType getSingleTransactionType(Long id) {
-        return this.transactionTypeRepository.getOne(id);
+    public Optional<TransactionType> getSingleTransactionType(Long id) {
+        return this.transactionTypeRepository.findById(id);
     }
 
     @Override

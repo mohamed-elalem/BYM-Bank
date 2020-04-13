@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class InterestRateService implements IInterestRateService {
 
@@ -19,8 +21,8 @@ public class InterestRateService implements IInterestRateService {
     }
 
     @Override
-    public InterestRate getSingleInterestRate(Long id) {
-        return this.interestRateRepository.getOne(id);
+    public Optional<InterestRate> getSingleInterestRate(Long id) {
+        return this.interestRateRepository.findById(id);
     }
 
     @Override
