@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user/accounts")
+@RequestMapping("/api/teller/users/{userId}/accounts")
 public class AccountController {
     IAccountService iAccountService;
     UserService userService;
@@ -27,13 +27,14 @@ public class AccountController {
         this.userService = userService;
     }
     @PostMapping(value = "")
-    public ResponseEntity createAccount(@RequestBody @Valid Account account,Long userId, BindingResult bindingResult){
+    public ResponseEntity createAccount(@RequestBody @Valid Account account, @PathVariable("userId") Long userId, BindingResult bindingResult){
 
         try {
           Optional<User> user=  userService.findByIdAndRole ( userId,"ROLE_USER" );
+
           if(user.isPresent ()){
               Account acc = this.iAccountService.save(account,user.get ());
-              return  ResponseEntity.ok(acc.getId ());
+              return  ResponseEntity.ok(acc);
           }else{
               throw new IllegalArgumentException ( );
           }
