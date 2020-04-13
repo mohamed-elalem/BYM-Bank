@@ -1,6 +1,10 @@
 package com.bym.bankingsystem.models.transaction;
 
+import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.account.Account;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,39 +12,56 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Transaction {
+
+    public static class TransactionBuilder implements Builder<Transaction> {
+        private Transaction transaction;
+
+        public TransactionBuilder() {
+            this.transaction = new Transaction();
+        }
+
+        public TransactionBuilder withAmount(Float amount) {
+            transaction.setAmount(amount);
+            return this;
+        }
+
+        public TransactionBuilder withTransactionDate(LocalDate date) {
+            transaction.setTransactionDate(date);
+            return this;
+        }
+
+        public TransactionBuilder withTransactionType(TransactionType transactionType) {
+            transaction.setTransactionType(transactionType);
+            return this;
+        }
+
+        public TransactionBuilder withAccount(Account account) {
+            transaction.setAccount(account);
+            return this;
+        }
+
+        @Override
+        public Transaction build() {
+            return transaction;
+        }
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
 
-    private double amount;
+    private Float amount;
     @NotNull
     @Column(name = "transaction_date", nullable = false)
     private LocalDate transactionDate;
-    @NotBlank
-    @Column(name = "description", nullable = false)
-    private String description;
-    @Column(name = "account_id", insertable = false, updatable = false)
-    private Long accountId;
-    @Column(name = "from_account_id", insertable = false, updatable = false)
-    private Long fromAccountId;
-    @Column(name = "to_account_id", insertable = false, updatable = false)
-    private Long toAccountId;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn (name="account_id")
+    @ManyToOne
+    @JsonBackReference
     private Account account;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn (name="from_account_id")
-    private Account fromAccount;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn (name="to_account_id")
-    private Account toAccount;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn (name="transaction_type_id")
+    @ManyToOne
     private TransactionType transactionType;
 
     public Long getId() {
@@ -51,11 +72,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public double getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -67,36 +88,12 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public String getDescription() {
-        return description;
+    public TransactionType getTransactionType() {
+        return transactionType;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
-    public Long getFromAccountId() {
-        return fromAccountId;
-    }
-
-    public void setFromAccountId(Long fromAccountId) {
-        this.fromAccountId = fromAccountId;
-    }
-
-    public Long getToAccountId() {
-        return toAccountId;
-    }
-
-    public void setToAccountId(Long toAccountId) {
-        this.toAccountId = toAccountId;
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
     }
 
     public Account getAccount() {
@@ -107,35 +104,7 @@ public class Transaction {
         this.account = account;
     }
 
-    public Account getFromAccount() {
-        return fromAccount;
-    }
-
-    public void setFromAccount(Account fromAccount) {
-        this.fromAccount = fromAccount;
-    }
-
-    public Account getToAccount() {
-        return toAccount;
-    }
-
-    public void setToAccount(Account toAccount) {
-        this.toAccount = toAccount;
-    }
-
-    public TransactionType getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(TransactionType transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "id=" + id +
-                ", amount='" + amount + '\'' +
-                '}';
+    public static TransactionBuilder create() {
+        return new TransactionBuilder();
     }
 }
