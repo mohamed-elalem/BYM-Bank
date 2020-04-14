@@ -1,5 +1,7 @@
 package com.bym.bankingsystem.models.loan;
 
+import com.bym.bankingsystem.models.account.Account;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -17,6 +19,8 @@ public class Loan {
     @NotNull
     @Column(name = "loan_amount", nullable = false)
     private double loanAmount;
+    @Column(name = "current_paid", nullable = false)
+    private double currentPaid;
     @NotNull
     @Column(name = "interest_rate", nullable = false)
     private double interestRate;
@@ -26,10 +30,15 @@ public class Loan {
     @NotNull
     @Column(name = "loan_date", nullable = false)
     private LocalDate loanDate;
+
+    @Column(name = "last_paid_date", nullable = false)
+    private LocalDate lastPaidDate;
     @NotNull
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @OneToOne
+    private Account account;
     public Long getId() {
         return id;
     }
@@ -86,4 +95,27 @@ public class Loan {
         this.active = active;
     }
 
+    public double getCurrentPaid() {
+        return currentPaid;
+    }
+
+    public void setCurrentPaid(double currentPaid) {
+        this.currentPaid = currentPaid;
+    }
+
+    public LocalDate getLastPaidDate() {
+        return lastPaidDate;
+    }
+
+    public void setLastPaidDate(LocalDate lastPaidDate) {
+        this.lastPaidDate = lastPaidDate;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }
