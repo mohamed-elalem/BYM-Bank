@@ -21,15 +21,17 @@ public class Loan {
     private double loanAmount;
     @Column(name = "current_paid", nullable = false)
     private double currentPaid;
+    @Column(name = "paid_months", nullable = false)
+    private double paidMonths;
     @NotNull
     @Column(name = "interest_rate", nullable = false)
     private double interestRate;
     @NotNull
-    @Column(name = "length", nullable = false)
-    private int length;
+    @Column(name = "months", nullable = false)
+    private int months;
     @NotNull
-    @Column(name = "loan_date", nullable = false)
-    private LocalDate loanDate;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
     @Column(name = "last_paid_date", nullable = false)
     private LocalDate lastPaidDate;
@@ -71,22 +73,6 @@ public class Loan {
         this.interestRate = interestRate;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public LocalDate getLoanDate() {
-        return loanDate;
-    }
-
-    public void setLoanDate(LocalDate loanDate) {
-        this.loanDate = loanDate;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -117,5 +103,29 @@ public class Loan {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public double getPaidMonths() {
+        return paidMonths;
+    }
+
+    public void setPaidMonths(double paidMonths) {
+        this.paidMonths = paidMonths;
+    }
+
+    public int getMonths() {
+        return months;
+    }
+
+    public void setMonths(int months) {
+        this.months = months;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 }

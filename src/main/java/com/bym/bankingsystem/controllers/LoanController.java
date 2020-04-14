@@ -27,7 +27,7 @@ public class LoanController {
     public ResponseEntity createAccount(@RequestBody @Valid Loan loan, @PathVariable("accountId") Long accountId, BindingResult bindingResult){
 
         try {
-           Optional<Account> account = this.iAccountService.getSingleLoan ( accountId );
+           Optional<Account> account = this.iAccountService.getSingleAccount ( accountId );
             if(account.isPresent ()){
                 loan.setAccount ( account.get () );
               Loan ln =  this.iLoanService.save ( loan );
@@ -53,7 +53,7 @@ public class LoanController {
                 throw new IllegalArgumentException ( );
             }
         }catch (Exception ex){
-            return ResponseEntity.badRequest ().body ( bindingResult.getFieldError ());
+            return ResponseEntity.badRequest ().build ();
         }
     }
 }
