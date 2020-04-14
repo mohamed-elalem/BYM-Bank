@@ -153,10 +153,10 @@ public class ApplicationSeeds {
                 .withLoanApplicationNumber("0001")
                 .withLoanAmount(2000)
                 .withCurrentPaid(0)
-                .withLength(12)
+                .withMonths(12)
                 .withAccount(customerAccount)
                 .withInterestRate(0.08)
-                .withLoanDate( LocalDate.of(2020,4,1))
+                .withStartDate( LocalDate.of(2020,4,1))
                 .withLastPaidDate(LocalDate.of(2020,4,1))
                 .build();
         iLoanRepository.save(loan);

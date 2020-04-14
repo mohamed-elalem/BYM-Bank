@@ -37,13 +37,18 @@ public class Loan {
             return this;
         }
 
-        public Loan.LoanBuilder withLength(int length){
-            loan.setLength(length);
+        public Loan.LoanBuilder withPaidMonths(int months){
+            loan.setPaidMonths(months);
             return this;
         }
 
-        public Loan.LoanBuilder withLoanDate(LocalDate loanDate){
-            loan.setLoanDate(loanDate);
+        public Loan.LoanBuilder withMonths(int months){
+            loan.setMonths(months);
+            return this;
+        }
+
+        public Loan.LoanBuilder withStartDate(LocalDate loanDate){
+            loan.setStartDate(loanDate);
             return this;
         }
 
