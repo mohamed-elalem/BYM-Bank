@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Component
+
 public class TransactionTypesBootstrap implements ApplicationRunner {
 
     private TransactionTypeRepository transactionTypeRepository;

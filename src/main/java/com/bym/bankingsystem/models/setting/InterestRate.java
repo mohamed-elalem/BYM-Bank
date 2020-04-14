@@ -1,18 +1,52 @@
 package com.bym.bankingsystem.models.setting;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.bym.bankingsystem.models.Builder;
+import com.bym.bankingsystem.models.account.Account;
+import com.bym.bankingsystem.models.auth.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class InterestRate {
+    public static class InterestRateBuilder implements Builder<InterestRate> {
+        private InterestRate interestRate;
+
+        public InterestRateBuilder() {
+            this.interestRate = new InterestRate();
+        }
+
+        public InterestRate.InterestRateBuilder withId(Long id) {
+            interestRate.setId(id);
+            return this;
+        }
+
+        public InterestRate.InterestRateBuilder withName(String name){
+            interestRate.setName(name);
+            return this;
+        }
+
+        public InterestRate.InterestRateBuilder withRate(Double rate){
+            interestRate.setRate(rate);
+            return this;
+        }
+
+        @Override
+        public InterestRate build() {
+            return interestRate;
+        }
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
+    private String name;
+    private Double rate;
 
-    private Double loanRate;
-    private Double savingRate;
+    @JsonIgnore
+    @OneToMany(mappedBy = "interestRate")
+    private List<Account> accounts;
 
     public Long getId() {
         return id;
@@ -22,19 +56,23 @@ public class InterestRate {
         this.id = id;
     }
 
-    public Double getLoanRate() {
-        return loanRate;
+    public String getName() {
+        return name;
     }
 
-    public void setLoanRate(Double loanRate) {
-        this.loanRate = loanRate;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Double getSavingRate() {
-        return savingRate;
+    public Double getRate() {
+        return rate;
     }
 
-    public void setSavingRate(Double savingRate) {
-        this.savingRate = savingRate;
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public static InterestRate.InterestRateBuilder create() {
+        return new InterestRate.InterestRateBuilder();
     }
 }

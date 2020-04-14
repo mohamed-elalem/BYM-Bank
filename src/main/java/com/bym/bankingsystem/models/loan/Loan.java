@@ -1,5 +1,6 @@
 package com.bym.bankingsystem.models.loan;
 
+import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.account.Account;
 
 import javax.persistence.*;
@@ -9,6 +10,64 @@ import java.time.LocalDate;
 
 @Entity
 public class Loan {
+    public static class LoanBuilder implements Builder<Loan> {
+        private Loan loan;
+
+        public LoanBuilder() {
+            this.loan = new Loan();
+        }
+
+        public Loan.LoanBuilder withId(Long id){
+            loan.setId(id);
+            return this;
+        }
+
+        public Loan.LoanBuilder withLoanApplicationNumber(String loanApplicationNumber){
+            loan.setLoanApplicationNumber(loanApplicationNumber);
+            return this;
+        }
+
+        public Loan.LoanBuilder withLoanAmount(double loanAmount){
+            loan.setLoanAmount(loanAmount);
+            return this;
+        }
+
+        public Loan.LoanBuilder withInterestRate(double interestRate){
+            loan.setInterestRate(interestRate);
+            return this;
+        }
+
+        public Loan.LoanBuilder withLength(int length){
+            loan.setLength(length);
+            return this;
+        }
+
+        public Loan.LoanBuilder withLoanDate(LocalDate loanDate){
+            loan.setLoanDate(loanDate);
+            return this;
+        }
+
+        public Loan.LoanBuilder withCurrentPaid(double currentPaid){
+            loan.setCurrentPaid(currentPaid);
+            return this;
+        }
+
+        public Loan.LoanBuilder withLastPaidDate(LocalDate lastPaidDate){
+            loan.setLastPaidDate(lastPaidDate);
+            return this;
+        }
+
+        public Loan.LoanBuilder withAccount(Account account){
+            loan.setAccount(account);
+            return this;
+        }
+
+        @Override
+        public Loan build() {
+            return loan;
+        }
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -127,5 +186,9 @@ public class Loan {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public static Loan.LoanBuilder create() {
+        return new Loan.LoanBuilder();
     }
 }

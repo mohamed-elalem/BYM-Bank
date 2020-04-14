@@ -28,7 +28,7 @@ public class WithdrawExchanger implements Exchanger {
         Transaction transaction = Transaction.create()
                 .withAmount(amount)
                 .withTransactionDate(LocalDate.now())
-                .withAccount(account)
+                .withAccountTo(account)
                 .withTransactionType(transactionType)
                 .build();
 

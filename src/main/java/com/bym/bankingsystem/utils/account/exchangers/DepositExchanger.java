@@ -27,7 +27,7 @@ public class DepositExchanger implements Exchanger {
         Transaction transaction = Transaction.create()
                 .withAmount(amount)
                 .withTransactionDate(LocalDate.now())
-                .withAccount(account)
+                .withAccountFrom(account)
                 .withTransactionType(transactionType)
                 .build();
 
