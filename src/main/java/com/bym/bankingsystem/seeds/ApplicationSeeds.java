@@ -151,13 +151,14 @@ public class ApplicationSeeds {
         // loan init
         Loan loan = Loan.create()
                 .withLoanApplicationNumber("0001")
-                .withLoanAmount(2000)
+                .withLoanAmount(2000f)
                 .withCurrentPaid(0)
                 .withMonths(12)
                 .withAccount(customerAccount)
                 .withInterestRate(0.08)
                 .withStartDate( LocalDate.of(2020,4,1))
                 .withLastPaidDate(LocalDate.of(2020,4,1))
+                .withActive(true)
                 .build();
         iLoanRepository.save(loan);
 
@@ -171,5 +172,10 @@ public class ApplicationSeeds {
                 .withName("WITHDRAW")
                 .build();
         transactionTypeRepository.save(withdrawType);
+
+        TransactionType loanType = TransactionType.create()
+                .withName("LOAN")
+                .build();
+        transactionTypeRepository.save(loanType);
     }
 }

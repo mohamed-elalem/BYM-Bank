@@ -2,6 +2,7 @@ package com.bym.bankingsystem.models.account;
 
 import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.auth.User;
+import com.bym.bankingsystem.models.loan.Loan;
 import com.bym.bankingsystem.models.setting.InterestRate;
 import com.bym.bankingsystem.models.transaction.Transaction;
 import com.fasterxml.jackson.annotation.*;
@@ -100,6 +101,9 @@ public class Account {
     @ManyToOne
     private InterestRate interestRate;
 
+    @OneToOne(mappedBy = "account")
+    private Loan loan;
+
     public User getUser() {
         return user;
     }
@@ -174,6 +178,14 @@ public class Account {
 
     public void setInterestRate(InterestRate interestRate) {
         this.interestRate = interestRate;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
     }
 
     public void addTransactionFrom(Transaction transaction) {

@@ -27,7 +27,7 @@ public class Loan {
             return this;
         }
 
-        public Loan.LoanBuilder withLoanAmount(double loanAmount){
+        public Loan.LoanBuilder withLoanAmount(Float loanAmount){
             loan.setLoanAmount(loanAmount);
             return this;
         }
@@ -49,6 +49,11 @@ public class Loan {
 
         public Loan.LoanBuilder withStartDate(LocalDate loanDate){
             loan.setStartDate(loanDate);
+            return this;
+        }
+
+        public Loan.LoanBuilder withActive(boolean active){
+            loan.setActive(active);
             return this;
         }
 
@@ -82,7 +87,7 @@ public class Loan {
     private String loanApplicationNumber;
     @NotNull
     @Column(name = "loan_amount", nullable = false)
-    private double loanAmount;
+    private float loanAmount;
     @Column(name = "current_paid", nullable = false)
     private double currentPaid;
     @Column(name = "paid_months", nullable = false)
@@ -125,7 +130,7 @@ public class Loan {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
+    public void setLoanAmount(float loanAmount) {
         this.loanAmount = loanAmount;
     }
 
@@ -195,5 +200,11 @@ public class Loan {
 
     public static Loan.LoanBuilder create() {
         return new Loan.LoanBuilder();
+    }
+
+    public float getNextPayment() {
+        float nextPayment = loanAmount / months;
+        float paymentWithInterest = nextPayment + (nextPayment * (float)interestRate);
+        return paymentWithInterest;
     }
 }
