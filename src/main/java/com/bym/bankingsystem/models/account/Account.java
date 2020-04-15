@@ -1,17 +1,75 @@
 package com.bym.bankingsystem.models.account;
 
+import com.bym.bankingsystem.models.Builder;
 import com.bym.bankingsystem.models.auth.User;
+import com.bym.bankingsystem.models.loan.Loan;
+import com.bym.bankingsystem.models.setting.InterestRate;
 import com.bym.bankingsystem.models.transaction.Transaction;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Account {
+
+    public static class AccountBuilder implements Builder<Account> {
+        private Account account;
+
+        public AccountBuilder() {
+            this.account = new Account();
+        }
+
+        public Account.AccountBuilder withUser(User user){
+            account.setUser(user);
+            return this;
+        }
+
+        public Account.AccountBuilder withAccountNumber(String accountNumber) {
+            account.setAccountNumber(accountNumber);
+            return this;
+        }
+
+        public Account.AccountBuilder withBalance(Float balance){
+            account.setBalance(balance);
+            return this;
+        }
+
+        public Account.AccountBuilder withActive(boolean active){
+            account.setActive(active);
+            return this;
+        }
+
+       public Account.AccountBuilder withAccountType(AccountType accountType){
+           account.setAccountType(accountType);
+           return this;
+       }
+
+        public Account.AccountBuilder withTransactionsFrom(List<Transaction> transactionsFrom){
+            account.setTransactionsFrom(transactionsFrom);
+            return this;
+        }
+
+        public Account.AccountBuilder withTransactionsTo(List<Transaction> transactionsTo){
+            account.setTransactionsTo(transactionsTo);
+            return this;
+        }
+
+        public Account.AccountBuilder withInterestRate(InterestRate interestRate){
+            account.setInterestRate(interestRate);
+            return this;
+        }
+
+        @Override
+        public Account build() {
+            return account;
+        }
+    }
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
@@ -29,9 +87,22 @@ public class Account {
     @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "accountFrom")
     @JsonManagedReference
-    private List<Transaction> transactions;
+    private List<Transaction> transactionsFrom;
+
+    @OneToMany(mappedBy = "accountTo")
+    @JsonManagedReference
+    private List<Transaction> transactionsTo;
+
+    @ManyToOne
+    private AccountType accountType;
+
+    @ManyToOne
+    private InterestRate interestRate;
+
+    @OneToOne(mappedBy = "account")
+    private Loan loan;
 
     public User getUser() {
         return user;
@@ -77,19 +148,64 @@ public class Account {
         this.active = active;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public AccountType getAccountType() {
+        return accountType;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
-    public void addTransaction(Transaction transaction) {
-        if (getTransactions() == null) {
-            this.setTransactions(new ArrayList<>());
+    public List<Transaction> getTransactionsFrom() {
+        return transactionsFrom;
+    }
+
+    public void setTransactionsFrom(List<Transaction> transactionsFrom) {
+        this.transactionsFrom = transactionsFrom;
+    }
+
+    public List<Transaction> getTransactionsTo() {
+        return transactionsTo;
+    }
+
+    public void setTransactionsTo(List<Transaction> transactionsTo) {
+        this.transactionsTo = transactionsTo;
+    }
+
+    public InterestRate getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(InterestRate interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+    }
+
+    public void addTransactionFrom(Transaction transaction) {
+        if (getTransactionsFrom() == null) {
+            this.setTransactionsFrom(new ArrayList<>());
         }
 
-        getTransactions().add(transaction);
+        getTransactionsFrom().add(transaction);
     }
+
+    public void addTransactionTo(Transaction transaction) {
+        if (getTransactionsTo() == null) {
+            this.setTransactionsTo(new ArrayList<>());
+        }
+
+        getTransactionsTo().add(transaction);
+    }
+
+    public static Account.AccountBuilder create() {
+        return new Account.AccountBuilder();
+    }
+
 }

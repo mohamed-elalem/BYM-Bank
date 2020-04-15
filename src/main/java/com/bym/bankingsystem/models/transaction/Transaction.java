@@ -37,8 +37,13 @@ public class Transaction {
             return this;
         }
 
-        public TransactionBuilder withAccount(Account account) {
-            transaction.setAccount(account);
+        public TransactionBuilder withAccountFrom(Account account) {
+            transaction.setAccountFrom(account);
+            return this;
+        }
+
+        public TransactionBuilder withAccountTo(Account account) {
+            transaction.setAccountTo(account);
             return this;
         }
 
@@ -59,9 +64,14 @@ public class Transaction {
 
     @ManyToOne
     @JsonBackReference
-    private Account account;
+    private Account accountFrom;
 
     @ManyToOne
+    @JsonBackReference
+    private Account accountTo;
+
+    @ManyToOne
+    @JsonBackReference
     private TransactionType transactionType;
 
     public Long getId() {
@@ -96,12 +106,20 @@ public class Transaction {
         this.transactionType = transactionType;
     }
 
-    public Account getAccount() {
-        return account;
+    public Account getAccountFrom() {
+        return accountFrom;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountFrom(Account accountFrom) {
+        this.accountFrom = accountFrom;
+    }
+
+    public Account getAccountTo() {
+        return accountTo;
+    }
+
+    public void setAccountTo(Account accountTo) {
+        this.accountTo = accountTo;
     }
 
     public static TransactionBuilder create() {
