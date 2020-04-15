@@ -34,6 +34,7 @@ public class DepositExchanger implements Exchanger {
         transactionRepository.save(transaction);
 
         account.setBalance(account.getBalance() + amount);
+        account.addTransactionFrom(transaction);
         accountRepository.save(account);
 
         return account;

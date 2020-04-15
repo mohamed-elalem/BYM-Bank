@@ -28,13 +28,13 @@ public class WithdrawExchanger implements Exchanger {
         Transaction transaction = Transaction.create()
                 .withAmount(amount)
                 .withTransactionDate(LocalDate.now())
-                .withAccountTo(account)
+                .withAccountFrom(account)
                 .withTransactionType(transactionType)
                 .build();
 
         transactionRepository.save(transaction);
-
         account.setBalance(account.getBalance() - amount);
+        account.addTransactionFrom(transaction);
         accountRepository.save(account);
 
         return account;

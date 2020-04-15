@@ -72,7 +72,11 @@ public class UserServiceImpl implements UserService {
            put("password", user.getRawPassword());
         }};
 
-        System.out.println(message instanceof Serializable);
-        rabbitTemplate.convertAndSend("tellerCreation", "", message);
+        String exchangeName = "tellerCreation";
+        if (role == "ROLE_USER") {
+            exchangeName = "userCreation";
+        }
+
+        rabbitTemplate.convertAndSend(exchangeName, "", message);
     }
 }

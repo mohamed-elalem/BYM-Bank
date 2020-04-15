@@ -135,6 +135,7 @@ public class ApplicationSeeds {
                 .withAccountNumber("BANK")
                 .withBalance(1000000f)
                 .withAccountType(savingType)
+                .withActive(true)
                 .build();
         accountRepository.save(bankAccount);
 
@@ -145,6 +146,7 @@ public class ApplicationSeeds {
                 .withBalance(1000f)
                 .withInterestRate(savingInterestRate)
                 .withAccountType(savingType)
+                .withActive(true)
                 .build();
         accountRepository.save(customerAccount);
 
