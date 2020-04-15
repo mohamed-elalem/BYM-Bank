@@ -16,7 +16,6 @@ public class LoanBankAccountProcessor implements ItemProcessor<Transaction, Tran
 
     @Override
     public Transaction process(Transaction transaction) throws Exception {
-        System.out.println(transaction.getAmount());
         Account bankAccount = transaction.getAccountTo();
         bankAccount.setBalance(bankAccount.getBalance() + transaction.getAmount());
         return transaction;

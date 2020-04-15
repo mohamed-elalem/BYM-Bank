@@ -204,6 +204,11 @@ public class Account {
         getTransactionsTo().add(transaction);
     }
 
+    public float getInterestRateValue() {
+        double interestRate = getInterestRate().getRate();
+        return balance * (float)interestRate;
+    }
+
     public static Account.AccountBuilder create() {
         return new Account.AccountBuilder();
     }
