@@ -1,6 +1,7 @@
 package com.bym.bankingsystem.filters;
 
 import com.bym.bankingsystem.utils.JWTUtil;
+import com.google.common.net.HttpHeaders;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,8 +30,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        final String authorizationHeader = httpServletRequest.getHeader("Authorization");
-
+        final String authorizationHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         String username = null;
         String jwt = null;
 

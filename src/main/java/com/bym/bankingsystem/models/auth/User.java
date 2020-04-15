@@ -38,6 +38,7 @@ public class User implements UserDetails {
 
         public UserBuilder withPassword(String password) {
             this.user.setPassword(password);
+            this.user.setRawPassword(password);
             return this;
         }
 
@@ -72,6 +73,9 @@ public class User implements UserDetails {
 
     @JsonIgnoreProperties
     private String password;
+
+    @Transient
+    private String rawPassword;
 
     @JsonIgnore
     private boolean enabled;
@@ -160,6 +164,14 @@ public class User implements UserDetails {
             this.setRoles(new ArrayList<>());
         }
         this.getRoles().add(role);
+    }
+
+    public String getRawPassword() {
+        return rawPassword;
+    }
+
+    public void setRawPassword(String rawPassword) {
+        this.rawPassword = rawPassword;
     }
 
     public static UserBuilder create() {
