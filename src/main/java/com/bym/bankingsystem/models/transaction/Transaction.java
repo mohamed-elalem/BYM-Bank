@@ -63,11 +63,11 @@ public class Transaction {
     private LocalDate transactionDate;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "accountFrom")
     private Account accountFrom;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "accountTo")
     private Account accountTo;
 
     @ManyToOne
