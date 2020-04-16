@@ -21,7 +21,10 @@ public class BankingSystemApplication {
     JobLauncher jobLauncher;
 
     @Autowired
-    Job job;
+    Job loanTransaction;
+
+    @Autowired
+    Job accountsInterestRate;
 
     public static void main(String[] args) {
         ConfigurableApplicationContext app =  SpringApplication.run(BankingSystemApplication.class, args);
@@ -31,12 +34,21 @@ public class BankingSystemApplication {
 
 
     @Scheduled(cron = "0 */1 * * * ?")
-    public void perform() throws Exception
+    public void performLoanJob() throws Exception
     {
         JobParameters params = new JobParametersBuilder()
                 .addString("loanTransaction", String.valueOf(System.currentTimeMillis()))
                 .toJobParameters();
-        jobLauncher.run(job, params);
+        jobLauncher.run(loanTransaction, params);
+    }
+
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void performInterestRateJob() throws Exception
+    {
+        JobParameters params = new JobParametersBuilder()
+                .addString("accountsInterestRate", String.valueOf(System.currentTimeMillis()))
+                .toJobParameters();
+        jobLauncher.run(accountsInterestRate, params);
     }
 
 }

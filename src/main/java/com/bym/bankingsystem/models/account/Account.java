@@ -88,16 +88,17 @@ public class Account {
     private User user;
 
     @OneToMany(mappedBy = "accountFrom")
-    @JsonManagedReference
+    @JsonManagedReference(value = "accountFrom")
     private List<Transaction> transactionsFrom;
 
     @OneToMany(mappedBy = "accountTo")
-    @JsonManagedReference
+    @JsonManagedReference(value = "accountTo")
     private List<Transaction> transactionsTo;
 
     @ManyToOne
     private AccountType accountType;
 
+    @JsonIgnore
     @ManyToOne
     private InterestRate interestRate;
 
@@ -202,6 +203,12 @@ public class Account {
         }
 
         getTransactionsTo().add(transaction);
+    }
+
+    @JsonIgnore
+    public float getInterestRateValue() {
+        double interestRate = getInterestRate().getRate();
+        return balance * (float)interestRate;
     }
 
     public static Account.AccountBuilder create() {
