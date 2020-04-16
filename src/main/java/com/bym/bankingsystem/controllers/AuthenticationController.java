@@ -31,6 +31,7 @@ public class AuthenticationController extends BaseController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
+
             this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
@@ -39,6 +40,9 @@ public class AuthenticationController extends BaseController {
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        if(userDetails == null){
+            return ResponseEntity.noContent ().build ();
+        }
         final String jwtToken = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
