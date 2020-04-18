@@ -102,7 +102,7 @@ public class Loan {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "last_paid_date", nullable = false)
+    @Column(name = "last_paid_date")
     private LocalDate lastPaidDate;
     @NotNull
     @Column(name = "active", nullable = false)

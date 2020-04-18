@@ -20,7 +20,7 @@ public class LoanController {
     private IAccountService iAccountService;
     public  LoanController( ILoanService iLoanService,IAccountService iAccountService){
         this.iLoanService = iLoanService;
-        this.iLoanService = iLoanService;
+        this.iAccountService = iAccountService;
     }
 
     @PostMapping(value = "createloan/{accountId}")
